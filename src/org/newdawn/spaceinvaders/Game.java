@@ -1,9 +1,6 @@
 package org.newdawn.spaceinvaders;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -11,8 +8,7 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import org.newdawn.spaceinvaders.entity.AlienEntity;
 import org.newdawn.spaceinvaders.entity.Entity;
@@ -75,23 +71,30 @@ public class Game extends Canvas
 	private String windowTitle = "Space Invaders 102";
 	/** The game window that we'll update with the frame count */
 	private JFrame container;
+	private JFrame login;
+
+	Toolkit toolkit = Toolkit.getDefaultToolkit();
+	Dimension screenSize = toolkit.getScreenSize();
+
+	Font font_basic = new Font("맑은 고딕",Font.PLAIN,12);
+	Font font_basic_bold = new Font("맑은 고딕",Font.BOLD,12);
 	
 	/**
 	 * Construct our game and set it running.
 	 */
 	public Game() {
+//		Font font = new Font("돋움",Font.PLAIN,12);
 		// create a frame to contain our game
 		container = new JFrame("Space Invaders 102");
-		
+
 		// get hold the content of the frame and set up the resolution of the game
 		JPanel panel = (JPanel) container.getContentPane();
 		panel.setPreferredSize(new Dimension(800,600));
-		panel.setLayout(null);
-		
+
 		// setup our canvas size and put it into the content of the frame
-		setBounds(0,0,800,600);
+		container.setLocation(screenSize.width/2 - 400, screenSize.height/2 - 300);
 		panel.add(this);
-		
+
 		// Tell AWT not to bother repainting our canvas since we're
 		// going to do that our self in accelerated mode
 		setIgnoreRepaint(true);
@@ -100,15 +103,12 @@ public class Game extends Canvas
 		container.pack();
 		container.setResizable(false);
 		container.setVisible(true);
-		
+
+
 		// add a listener to respond to the user closing the window. If they
 		// do we'd like to exit the game
-		container.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
-		
+		container.addWindowListener(new WindowAdapter() {public void windowClosing(WindowEvent e) {System.exit(0);}});
+
 		// add a key input system (defined below) to our canvas
 		// so we can respond to key pressed
 		addKeyListener(new KeyInputHandler());
@@ -124,6 +124,7 @@ public class Game extends Canvas
 		// initialise the entities in our game so there's something
 		// to see at startup
 		initEntities();
+		login();
 	}
 	
 	/**
@@ -145,6 +146,57 @@ public class Game extends Canvas
 	 * Initialise the starting state of the entities (ship and aliens). Each
 	 * entitiy will be added to the overall list of entities in the game.
 	 */
+
+	private void login(){
+		login = new JFrame("로그인/회원가입");
+//		로그인/회원가입 창
+		JPanel loginPanel = (JPanel) login.getContentPane();
+		loginPanel.setPreferredSize(new Dimension(400, 300));
+		loginPanel.setLayout(null);
+
+		login.setLocation(screenSize.width/2 - 200, screenSize.height/2 - 150);
+
+		Color loginBGC = new Color(202, 226, 238);
+		loginPanel.setBackground(loginBGC);
+
+		JLabel IDLabel = new JLabel("아이디");
+		IDLabel.setHorizontalAlignment(JLabel.CENTER);
+		IDLabel.setBounds(100, 50, 60, 20);
+		IDLabel.setFont(font_basic_bold);
+		loginPanel.add(IDLabel);
+
+		JTextArea inputID = new JTextArea();
+		inputID.setText("아이디를 입력하세요");
+		inputID.setBounds(170, 50, 150, 20);
+		inputID.setFont(font_basic);
+		loginPanel.add(inputID);
+
+		JLabel PWDLabel = new JLabel("비밀번호");
+		PWDLabel.setHorizontalAlignment(JLabel.CENTER);
+		PWDLabel.setBounds(100, 75, 60, 20);
+		PWDLabel.setFont(font_basic_bold);
+		loginPanel.add(PWDLabel);
+
+		JTextArea inputPWD = new JTextArea();
+		inputPWD.setText("비밀번호를 입력하세요");
+		inputPWD.setBounds(170, 75, 150, 20);
+		inputPWD.setFont(font_basic);
+		loginPanel.add(inputPWD);
+
+		JButton loginbtn = new JButton("로그인");
+		loginbtn.setBounds(150, 200, 100, 40);
+		loginbtn.setFont(font_basic_bold);
+		loginPanel.add(loginbtn);
+
+		JButton registerbtn = new JButton("회원가입");
+		registerbtn.setBounds(150, 250, 100, 40);
+		registerbtn.setFont(font_basic_bold);
+		loginPanel.add(registerbtn);
+
+		login.pack();
+		login.setResizable(false);
+		login.setVisible(true);
+	}
 	private void initEntities() {
 		// create the player ship and place it roughly in the center of the screen
 		ship = new ShipEntity(this,"sprites/ship.gif",370,550);
