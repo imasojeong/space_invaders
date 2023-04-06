@@ -94,6 +94,7 @@ public class Game extends Canvas {
 
 		// 소리 끄기
 		// 이미지 로드
+		// 이미지 상대 경로로 저장하기
 		ImageIcon audioOn = new ImageIcon("C:/Users/AISELab/Desktop/audioOn.png");
 		ImageIcon audioOff = new ImageIcon("C:/Users/AISELab/Desktop/audioOff.png");
 		Image img = audioOn.getImage();

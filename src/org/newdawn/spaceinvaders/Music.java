@@ -15,6 +15,7 @@ public class Music extends Game {
     public static void mainAudioOn(){
 
         try {
+            // 오디오 상대 경로로 저장하기
             File file = new File("C:/Users/AISELab/Downloads/Game.wav");
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(file));
@@ -27,6 +28,7 @@ public class Music extends Game {
     }
     public static void shotAudio(){
         try {
+            // 오디오 상대 경로 저장하기
             File file = new File("C:/Users/AISELab/Downloads/shot.wav");
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(file));
