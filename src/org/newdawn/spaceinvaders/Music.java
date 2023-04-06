@@ -15,7 +15,7 @@ public class Music extends Game {
     public static void mainAudioOn(){
 
         try {
-            File file = new File("C:/Users/AISELab/Downloads/Game.wav");
+            File file = new File("src/Game.wav");
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(file));
             clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -27,7 +27,7 @@ public class Music extends Game {
     }
     public static void shotAudio(){
         try {
-            File file = new File("C:/Users/AISELab/Downloads/shot.wav");
+            File file = new File("src/shot.wav");
             Clip clip = AudioSystem.getClip();
             clip.open(AudioSystem.getAudioInputStream(file));
 //            clip.loop(Clip.LOOP_CONTINUOUSLY);
