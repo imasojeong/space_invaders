@@ -1,12 +1,13 @@
 package org.newdawn.spaceinvaders;
 
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferStrategy;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.*;
 
@@ -30,8 +31,7 @@ import org.newdawn.spaceinvaders.entity.ShotEntity;
  * 
  * @author Kevin Glass
  */
-public class Game extends Canvas 
-{
+public class Game extends Canvas {
 	/** The stragey that allows us to use accelerate page flipping */
 	private BufferStrategy strategy;
 	/** True if the game is currently "running", i.e. the game loop is looping */
@@ -71,7 +71,6 @@ public class Game extends Canvas
 	private String windowTitle = "Space Invaders 102";
 	/** The game window that we'll update with the frame count */
 	private JFrame container;
-	private JFrame login;
 
 	Toolkit toolkit = Toolkit.getDefaultToolkit();
 	Dimension screenSize = toolkit.getScreenSize();
@@ -83,7 +82,6 @@ public class Game extends Canvas
 	 * Construct our game and set it running.
 	 */
 	public Game() {
-//		Font font = new Font("돋움",Font.PLAIN,12);
 		// create a frame to contain our game
 		container = new JFrame("Space Invaders 102");
 
@@ -93,6 +91,50 @@ public class Game extends Canvas
 
 		// setup our canvas size and put it into the content of the frame
 		container.setLocation(screenSize.width/2 - 400, screenSize.height/2 - 300);
+
+		// 소리 끄기
+		// 이미지 로드
+		ImageIcon audioOn = new ImageIcon("C:/Users/AISELab/Desktop/audioOn.png");
+		ImageIcon audioOff = new ImageIcon("C:/Users/AISELab/Desktop/audioOff.png");
+		Image img = audioOn.getImage();
+
+		// 이미지 크기 변경
+		Image changeImg = img.getScaledInstance(30,30, Image.SCALE_SMOOTH);
+		ImageIcon changeIcon = new ImageIcon(changeImg);
+
+		// 버튼 생성
+		JButton AudioBtn = new JButton(changeIcon);
+		AudioBtn.setBounds(753,20,30,30);
+		panel.add(AudioBtn);
+
+		AudioBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+//				if (img==audioOn.getImage()){
+//				Image img = audioOff-.getImage();
+				// 이미지 크기 변경
+				Image changeImg = img.getScaledInstance(30,30, Image.SCALE_SMOOTH);
+				ImageIcon changeIcon = new ImageIcon(changeImg);
+
+				// 버튼 생성
+				JButton AudioBtn = new JButton(changeIcon);
+				AudioBtn.setBounds(753,20,30,30);
+				panel.add(AudioBtn);
+//				repaint();
+				}
+//				ImageIcon audioOff = new ImageIcon("C:/Users/AISELab/Desktop/audioOff.png");
+//				Image img = audioOff.getImage();
+//
+//				// 이미지 크기 변경
+//				Image changeImg = img.getScaledInstance(30,30, Image.SCALE_SMOOTH);
+//				ImageIcon changeIcon = new ImageIcon(changeImg);
+//
+//				// 버튼 생성
+//				JButton removeAudioBtn = new JButton(changeIcon);
+//				removeAudioBtn.setBounds(753,20,30,30);
+//				panel.add(AudioBtn);
+		});
+
+
 		panel.add(this);
 
 		// Tell AWT not to bother repainting our canvas since we're
@@ -124,7 +166,12 @@ public class Game extends Canvas
 		// initialise the entities in our game so there's something
 		// to see at startup
 		initEntities();
-		login();
+
+		// 배경 음악 플레이
+		Music.mainAudioOn();
+
+		// 로그인 창 띄우기
+		Login.login();
 	}
 	
 	/**
@@ -147,56 +194,6 @@ public class Game extends Canvas
 	 * entitiy will be added to the overall list of entities in the game.
 	 */
 
-	private void login(){
-		login = new JFrame("로그인/회원가입");
-//		로그인/회원가입 창
-		JPanel loginPanel = (JPanel) login.getContentPane();
-		loginPanel.setPreferredSize(new Dimension(400, 300));
-		loginPanel.setLayout(null);
-
-		login.setLocation(screenSize.width/2 - 200, screenSize.height/2 - 150);
-
-		Color loginBGC = new Color(202, 226, 238);
-		loginPanel.setBackground(loginBGC);
-
-		JLabel IDLabel = new JLabel("아이디");
-		IDLabel.setHorizontalAlignment(JLabel.CENTER);
-		IDLabel.setBounds(100, 50, 60, 20);
-		IDLabel.setFont(font_basic_bold);
-		loginPanel.add(IDLabel);
-
-		JTextArea inputID = new JTextArea();
-		inputID.setText("아이디를 입력하세요");
-		inputID.setBounds(170, 50, 150, 20);
-		inputID.setFont(font_basic);
-		loginPanel.add(inputID);
-
-		JLabel PWDLabel = new JLabel("비밀번호");
-		PWDLabel.setHorizontalAlignment(JLabel.CENTER);
-		PWDLabel.setBounds(100, 75, 60, 20);
-		PWDLabel.setFont(font_basic_bold);
-		loginPanel.add(PWDLabel);
-
-		JTextArea inputPWD = new JTextArea();
-		inputPWD.setText("비밀번호를 입력하세요");
-		inputPWD.setBounds(170, 75, 150, 20);
-		inputPWD.setFont(font_basic);
-		loginPanel.add(inputPWD);
-
-		JButton loginbtn = new JButton("로그인");
-		loginbtn.setBounds(150, 200, 100, 40);
-		loginbtn.setFont(font_basic_bold);
-		loginPanel.add(loginbtn);
-
-		JButton registerbtn = new JButton("회원가입");
-		registerbtn.setBounds(150, 250, 100, 40);
-		registerbtn.setFont(font_basic_bold);
-		loginPanel.add(registerbtn);
-
-		login.pack();
-		login.setResizable(false);
-		login.setVisible(true);
-	}
 	private void initEntities() {
 		// create the player ship and place it roughly in the center of the screen
 		ship = new ShipEntity(this,"sprites/ship.gif",370,550);
@@ -287,6 +284,8 @@ public class Game extends Canvas
 		lastFire = System.currentTimeMillis();
 		ShotEntity shot = new ShotEntity(this,"sprites/shot.gif",ship.getX()+10,ship.getY()-30);
 		entities.add(shot);
+		Music.shotAudio();
+
 	}
 	
 	/**
